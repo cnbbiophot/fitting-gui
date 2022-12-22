@@ -21,6 +21,7 @@ function varargout = gui_FCSfit(varargin)
 % agv - 04Mar2019 Make function listbox functional
 % agv - 14Mar2019 Implement copy buttons
 % agv - 17jun2020 added log scale in Y axes
+% agv - added symmetry in res axes
 
 % % Example of use:
 % % load('D:\Usuarios\Arturo\180307 FCS Volume Calibration\B&H data\analisis int10freq1000sin18\180307 633_10nm+t5_m1.mat')
@@ -97,7 +98,7 @@ if numel(varargin) == 4
     v.h_fitAxes=varargin{3}; %Handle a los ejes del ajuste
     v.h_resAxes=varargin{4}; %Handle a los ejes de los residuos
 elseif numel(varargin) == 1
-    v.fittingFunctionName='fitfcn_FCS_3D_G0_D_single';
+    v.fittingFunctionName='fitfcn_partitionCoefficient_M3_melo11_Boltzmann_analitical';
     v.h_fitAxes=[]; %Handle a los ejes del ajuste
     v.h_resAxes=[]; %Handle a los ejes de los residuos
 else
@@ -308,7 +309,9 @@ switch v.globalFit
         end
         v.h_fitPlot(idxdatasets(dataAjuste))=plot (v.h_fitAxes, xdata, ymodel, 'Color', v.colores(idxdatasets(dataAjuste), :), 'Linewidth', 2);
         v.h_resPlot(idxdatasets(dataAjuste))=plot (v.h_resAxes, xdata, ymodel-ydata, 'Color', v.colores(idxdatasets(dataAjuste), :), 'Linewidth', 2);
-        ylim(v.h_resAxes, 'auto')
+%         ylim(v.h_resAxes, 'auto')
+        max_res = max(abs(ymodel-ydata));
+        ylim(v.h_resAxes, [-max_res max_res]) % added agv
 
         set(handles.edit_chi2,'string',num2str(chi2)); % write the value of chi2 in the box
 
@@ -884,8 +887,8 @@ for dataAjuste=1:numDataSetsAjuste
 end
 
 % set ([h_fitAxes, h_resAxes], 'Xscale', 'log')
-set ([h_fitAxes], 'Xscale', 'linear') %added
-set ([h_fitAxes], 'Yscale', 'log') %adde
+set ([h_fitAxes], 'Xscale', 'log') %added
+set ([h_fitAxes], 'Yscale', 'linear') %added
 
 
 
