@@ -102,6 +102,7 @@ else
     
 end
 
+disp(['The computed SPA error runs from ' num2str(paramSupportCI(2)) ' to ' num2str(paramSupportCI(1))])
 confidenceInterval=paramSupportCI(2)-paramSupportCI(1);
 
 %{
